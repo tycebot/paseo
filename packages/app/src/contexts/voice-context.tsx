@@ -9,6 +9,7 @@ import {
 } from "react";
 import { activateKeepAwakeAsync, deactivateKeepAwake } from "expo-keep-awake";
 import { useSessionStore } from "@/stores/session-store";
+import { useAppSettings } from "@/hooks/use-settings";
 import { createAudioEngine } from "@/voice/audio-engine";
 import type { AudioEngine } from "@/voice/audio-engine-types";
 import {
@@ -113,6 +114,7 @@ interface VoiceProviderProps {
 }
 
 export function VoiceProvider({ children }: VoiceProviderProps) {
+  const { settings } = useAppSettings();
   const engineRef = useRef<AudioEngine | null>(null);
   const runtimeRef = useRef<VoiceRuntime | null>(null);
 
@@ -137,6 +139,7 @@ export function VoiceProvider({ children }: VoiceProviderProps) {
 
     runtime = createVoiceRuntime({
       engine,
+      thinkingToneEnabled: settings.thinkingToneEnabled,
       getServerInfo: (serverId) =>
         useSessionStore.getState().getSession(serverId)?.serverInfo ?? null,
       activateKeepAwake: async (tag) => {
@@ -153,6 +156,10 @@ export function VoiceProvider({ children }: VoiceProviderProps) {
 
   const engine = engineRef.current;
   const runtime = runtimeRef.current!;
+
+  useEffect(() => {
+    runtime.setThinkingToneEnabled(settings.thinkingToneEnabled);
+  }, [runtime, settings.thinkingToneEnabled]);
 
   useEffect(() => {
     return () => {

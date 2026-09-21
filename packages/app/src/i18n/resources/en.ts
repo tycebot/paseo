@@ -2154,6 +2154,11 @@ export const en = {
           queue: "Queue",
         },
       },
+      thinkingTone: {
+        label: "Play thinking tone",
+        description: "Play a repeating tone while the agent is thinking",
+        accessibilityLabel: "Play thinking tone",
+      },
       serviceUrls: {
         label: "Service URLs",
         description: "Where to open URLs from running scripts",

@@ -77,6 +77,18 @@ async function expectSendBehavior(
     .toBe(expected);
 }
 
+async function expectThinkingTone(page: import("@playwright/test").Page, expected: boolean) {
+  await expect
+    .poll(async () => {
+      const raw = await page.evaluate(() => localStorage.getItem("@paseo:app-settings"));
+      if (!raw) {
+        return null;
+      }
+      return (JSON.parse(raw) as { thinkingToneEnabled?: boolean }).thinkingToneEnabled ?? false;
+    })
+    .toBe(expected);
+}
+
 async function openAgentRouteAndExpectFocused(input: {
   page: import("@playwright/test").Page;
   serverId: string;
@@ -128,6 +140,16 @@ test.describe("Settings toggle tab regression", () => {
       });
       await expect(defaultSendTrigger).toBeVisible();
       await expect(page.getByRole("menuitem", { name: "Queue", exact: true })).toHaveCount(0);
+
+      const thinkingToneSwitch = page.getByRole("switch", {
+        name: "Play thinking tone",
+        exact: true,
+      });
+      await expect(thinkingToneSwitch).toBeVisible();
+      await expect(thinkingToneSwitch).toBeChecked({ checked: false });
+      await thinkingToneSwitch.click();
+      await expect(thinkingToneSwitch).toBeChecked();
+      await expectThinkingTone(page, true);
 
       await defaultSendTrigger.click();
       await expect(page.getByRole("menuitem", { name: "Steer", exact: true })).toHaveAttribute(

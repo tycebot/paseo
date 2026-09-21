@@ -169,6 +169,26 @@ describe("loadAppSettingsFromStorage", () => {
     expect(result.language).toBe("system");
   });
 
+  it("disables the thinking tone by default", async () => {
+    const deps = makeDeps();
+
+    const result = await loadAppSettingsFromStorage(deps);
+
+    expect(result.thinkingToneEnabled).toBe(false);
+  });
+
+  it("loads a persisted thinking tone preference", async () => {
+    const deps = makeDeps({
+      storage: createInMemoryKeyValueStorage({
+        [APP_SETTINGS_KEY]: JSON.stringify({ thinkingToneEnabled: true }),
+      }),
+    });
+
+    const result = await loadAppSettingsFromStorage(deps);
+
+    expect(result.thinkingToneEnabled).toBe(true);
+  });
+
   it("defaults workspace title source to title when storage is empty", async () => {
     const deps = makeDeps();
 

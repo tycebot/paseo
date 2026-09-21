@@ -2089,6 +2089,11 @@ export const fr: TranslationResources = {
           queue: "File d'attente",
         },
       },
+      thinkingTone: {
+        label: "Jouer la tonalité de réflexion",
+        description: "Jouer une tonalité répétée pendant que l’agent réfléchit",
+        accessibilityLabel: "Jouer la tonalité de réflexion",
+      },
       serviceUrls: {
         label: "URL de services",
         description: "Où ouvrir les URL à partir de scripts en cours d'exécution",

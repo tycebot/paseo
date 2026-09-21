@@ -2069,6 +2069,11 @@ export const ru: TranslationResources = {
           queue: "Поставить в очередь",
         },
       },
+      thinkingTone: {
+        label: "Воспроизводить тон размышления",
+        description: "Воспроизводить повторяющийся тон, пока агент думает",
+        accessibilityLabel: "Воспроизводить тон размышления",
+      },
       serviceUrls: {
         label: "URL-адреса сервисов",
         description: "Где открывать URL-адреса запущенных скриптов",

@@ -2085,6 +2085,11 @@ export const es: TranslationResources = {
           queue: "Cola",
         },
       },
+      thinkingTone: {
+        label: "Reproducir tono de pensamiento",
+        description: "Reproduce un tono repetido mientras el agente piensa",
+        accessibilityLabel: "Reproducir tono de pensamiento",
+      },
       serviceUrls: {
         label: "URL de servicio",
         description: "Dónde abrir URL desde scripts en ejecución",

@@ -2010,6 +2010,11 @@ export const zhCN: TranslationResources = {
           queue: "排队",
         },
       },
+      thinkingTone: {
+        label: "播放思考提示音",
+        description: "代理思考时播放循环提示音",
+        accessibilityLabel: "播放思考提示音",
+      },
       serviceUrls: {
         label: "服务 URL",
         description: "运行脚本中的 URL 打开位置",

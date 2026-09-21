@@ -56,6 +56,7 @@ export interface VoiceSessionAdapter {
 
 export interface VoiceRuntimeDeps {
   engine: AudioEngine;
+  thinkingToneEnabled?: boolean;
   getServerInfo(serverId: string): DaemonServerInfo | null;
   activateKeepAwake(tag: string): Promise<void>;
   deactivateKeepAwake(tag: string): Promise<void>;
@@ -169,6 +170,7 @@ export interface VoiceRuntime {
   startVoice(serverId: string, agentId: string): Promise<void>;
   stopVoice(): Promise<void>;
   destroy(): Promise<void>;
+  setThinkingToneEnabled(enabled: boolean): void;
   toggleMute(): void;
   isVoiceModeForAgent(serverId: string, agentId: string): boolean;
   shouldPlayVoiceAudio(serverId: string): boolean;
@@ -202,6 +204,7 @@ export function createVoiceRuntime(deps: VoiceRuntimeDeps): VoiceRuntime {
     processing: false,
     generation: 0,
   };
+  let thinkingToneEnabled = deps.thinkingToneEnabled ?? false;
   const cue: CueState = {
     active: false,
     token: 0,
@@ -428,6 +431,7 @@ export function createVoiceRuntime(deps: VoiceRuntimeDeps): VoiceRuntime {
 
   function canPlayCue(): boolean {
     return (
+      thinkingToneEnabled &&
       state.snapshot.isVoiceMode &&
       state.snapshot.phase === "waiting" &&
       !state.telemetry.isSpeaking
@@ -822,6 +826,14 @@ export function createVoiceRuntime(deps: VoiceRuntimeDeps): VoiceRuntime {
       listeners.clear();
       telemetryListeners.clear();
       sessions.clear();
+    },
+
+    setThinkingToneEnabled(enabled) {
+      if (thinkingToneEnabled === enabled) {
+        return;
+      }
+      thinkingToneEnabled = enabled;
+      reconcileCue();
     },
 
     toggleMute() {

@@ -2045,6 +2045,11 @@ export const ko: TranslationResources = {
           queue: "대기열",
         },
       },
+      thinkingTone: {
+        label: "생각 중 알림음 재생",
+        description: "에이전트가 생각하는 동안 반복 알림음을 재생합니다",
+        accessibilityLabel: "생각 중 알림음 재생",
+      },
       serviceUrls: {
         label: "서비스 URL",
         description: "실행 중인 스크립트의 URL을 열 위치",

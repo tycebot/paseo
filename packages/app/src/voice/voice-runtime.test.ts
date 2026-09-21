@@ -65,11 +65,13 @@ function createServerInfo(): DaemonServerInfo {
 function createRuntime(options?: {
   engine?: AudioEngine;
   getServerInfo?: (serverId: string) => DaemonServerInfo | null;
+  thinkingToneEnabled?: boolean;
 }) {
   const engine = options?.engine ?? createAudioEngineMock();
   const runtime = createVoiceRuntime({
     engine,
     getServerInfo: options?.getServerInfo ?? (() => createServerInfo()),
+    thinkingToneEnabled: options?.thinkingToneEnabled ?? false,
     activateKeepAwake: vi.fn().mockResolvedValue(undefined),
     deactivateKeepAwake: vi.fn().mockResolvedValue(undefined),
   });
@@ -243,7 +245,7 @@ describe("voice runtime", () => {
 
   it("leaves playback phase unchanged after assistant playback while the turn is still active", async () => {
     const adapter = createSessionAdapter();
-    const { runtime, engine } = createRuntime();
+    const { runtime, engine } = createRuntime({ thinkingToneEnabled: true });
     runtime.registerSession(adapter);
 
     await runtime.startVoice("server-1", "agent-1");
@@ -255,7 +257,19 @@ describe("voice runtime", () => {
     expect(engine.play).toHaveBeenCalled();
   });
 
-  it("starts the thinking tone when an agent turn begins before playback", async () => {
+  it("starts the thinking tone when enabled and an agent turn begins before playback", async () => {
+    const adapter = createSessionAdapter();
+    const { runtime, engine } = createRuntime({ thinkingToneEnabled: true });
+    runtime.registerSession(adapter);
+
+    await runtime.startVoice("server-1", "agent-1");
+    runtime.onTurnEvent("server-1", "agent-1", "turn_started");
+
+    expect(runtime.getSnapshot().phase).toBe("waiting");
+    expect(engine.play).toHaveBeenCalled();
+  });
+
+  it("does not play the thinking tone when disabled", async () => {
     const adapter = createSessionAdapter();
     const { runtime, engine } = createRuntime();
     runtime.registerSession(adapter);
@@ -264,7 +278,7 @@ describe("voice runtime", () => {
     runtime.onTurnEvent("server-1", "agent-1", "turn_started");
 
     expect(runtime.getSnapshot().phase).toBe("waiting");
-    expect(engine.play).toHaveBeenCalled();
+    expect(engine.play).not.toHaveBeenCalled();
   });
 
   it("does not restart the thinking tone from local detection jitter while waiting", async () => {
@@ -277,7 +291,7 @@ describe("voice runtime", () => {
           resolvePlay = resolve;
         }),
     );
-    const { runtime } = createRuntime({ engine });
+    const { runtime } = createRuntime({ engine, thinkingToneEnabled: true });
     runtime.registerSession(adapter);
 
     await runtime.startVoice("server-1", "agent-1");
@@ -305,7 +319,7 @@ describe("voice runtime", () => {
 
   it("returns to listening after assistant playback once the turn is complete", async () => {
     const adapter = createSessionAdapter();
-    const { runtime, engine } = createRuntime();
+    const { runtime, engine } = createRuntime({ thinkingToneEnabled: true });
     runtime.registerSession(adapter);
 
     await runtime.startVoice("server-1", "agent-1");

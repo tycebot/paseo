@@ -2053,6 +2053,11 @@ export const ja: TranslationResources = {
           queue: "キュー",
         },
       },
+      thinkingTone: {
+        label: "思考音を再生",
+        description: "エージェントの思考中に繰り返し音を再生します",
+        accessibilityLabel: "思考音を再生",
+      },
       serviceUrls: {
         label: "サービスURL",
         description: "実行中のスクリプトからURLを開く場所",

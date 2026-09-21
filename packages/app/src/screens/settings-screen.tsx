@@ -284,6 +284,7 @@ interface GeneralSectionProps {
   settings: AppSettings;
   isDesktopApp: boolean;
   handleSendBehaviorChange: (behavior: SendBehavior) => void;
+  handleThinkingToneChange: (enabled: boolean) => void;
   handleServiceUrlBehaviorChange: (behavior: ServiceUrlBehavior) => void;
   handleLanguageChange: (language: AppLanguage) => void;
   handleTerminalScrollbackLinesChange: (lines: number) => void;
@@ -358,6 +359,7 @@ function GeneralSection({
   settings,
   isDesktopApp,
   handleSendBehaviorChange,
+  handleThinkingToneChange,
   handleServiceUrlBehaviorChange,
   handleLanguageChange,
   handleTerminalScrollbackLinesChange,
@@ -432,6 +434,19 @@ function GeneralSection({
               ))}
             </DropdownMenuContent>
           </DropdownMenu>
+        </View>
+        <View style={[settingsStyles.row, settingsStyles.rowBorder]}>
+          <View style={settingsStyles.rowContent}>
+            <Text style={settingsStyles.rowTitle}>{t("settings.general.thinkingTone.label")}</Text>
+            <Text style={settingsStyles.rowHint}>
+              {t("settings.general.thinkingTone.description")}
+            </Text>
+          </View>
+          <Switch
+            value={settings.thinkingToneEnabled}
+            onValueChange={handleThinkingToneChange}
+            accessibilityLabel={t("settings.general.thinkingTone.accessibilityLabel")}
+          />
         </View>
         <View style={[settingsStyles.row, settingsStyles.rowBorder]}>
           <View style={settingsStyles.rowContent}>
@@ -1272,6 +1287,13 @@ export default function SettingsScreen({ view, openAddHostIntent = null }: Setti
     [updateSettings],
   );
 
+  const handleThinkingToneChange = useCallback(
+    (enabled: boolean) => {
+      void updateSettings({ thinkingToneEnabled: enabled });
+    },
+    [updateSettings],
+  );
+
   const handleServiceUrlBehaviorChange = useCallback(
     (behavior: ServiceUrlBehavior) => {
       void updateSettings({ serviceUrlBehavior: behavior });
@@ -1528,6 +1550,7 @@ export default function SettingsScreen({ view, openAddHostIntent = null }: Setti
                   settings={settings}
                   isDesktopApp={isDesktopApp}
                   handleSendBehaviorChange={handleSendBehaviorChange}
+                  handleThinkingToneChange={handleThinkingToneChange}
                   handleServiceUrlBehaviorChange={handleServiceUrlBehaviorChange}
                   handleLanguageChange={handleLanguageChange}
                   handleTerminalScrollbackLinesChange={handleTerminalScrollbackLinesChange}

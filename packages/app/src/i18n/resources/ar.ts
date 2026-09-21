@@ -2034,6 +2034,11 @@ export const ar: TranslationResources = {
           queue: "طابور",
         },
       },
+      thinkingTone: {
+        label: "تشغيل نغمة التفكير",
+        description: "تشغيل نغمة متكررة أثناء تفكير الوكيل",
+        accessibilityLabel: "تشغيل نغمة التفكير",
+      },
       serviceUrls: {
         label: "عناوين URL للخدمة",
         description: "مكان فتح عناوين URL من تشغيل البرامج النصية",

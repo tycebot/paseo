@@ -2068,6 +2068,11 @@ export const ptBR: TranslationResources = {
           queue: "Fila",
         },
       },
+      thinkingTone: {
+        label: "Reproduzir tom de pensamento",
+        description: "Reproduz um tom repetido enquanto o agente está pensando",
+        accessibilityLabel: "Reproduzir tom de pensamento",
+      },
       serviceUrls: {
         label: "URLs de serviço",
         description: "Onde abrir URLs de scripts em execução",
